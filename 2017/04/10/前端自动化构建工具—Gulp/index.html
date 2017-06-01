@@ -1,0 +1,755 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="第一步：安装Node首先，最基本也最重要的是，我们需要搭建node环境。访问https://nodejs.org/en/，然后点击install按钮，下载完成后直接运行程序，就一切准备就绪。npm会随着安装包一起安装，稍后会用到它。 第二步：使用命令行也许现在你还不是很了解什么是命令行——OSX中的终端（Terminal），windows中的命令提示符（Command Prompt），但很快你就会">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端自动化构建工具—Gulp">
+<meta property="og:url" content="http://yoursite.com/2017/04/10/前端自动化构建工具—Gulp/index.html">
+<meta property="og:site_name" content="红尘之中一单骑的博客">
+<meta property="og:description" content="第一步：安装Node首先，最基本也最重要的是，我们需要搭建node环境。访问https://nodejs.org/en/，然后点击install按钮，下载完成后直接运行程序，就一切准备就绪。npm会随着安装包一起安装，稍后会用到它。 第二步：使用命令行也许现在你还不是很了解什么是命令行——OSX中的终端（Terminal），windows中的命令提示符（Command Prompt），但很快你就会">
+<meta property="og:updated_time" content="2017-05-12T06:44:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端自动化构建工具—Gulp">
+<meta name="twitter:description" content="第一步：安装Node首先，最基本也最重要的是，我们需要搭建node环境。访问https://nodejs.org/en/，然后点击install按钮，下载完成后直接运行程序，就一切准备就绪。npm会随着安装包一起安装，稍后会用到它。 第二步：使用命令行也许现在你还不是很了解什么是命令行——OSX中的终端（Terminal），windows中的命令提示符（Command Prompt），但很快你就会">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/10/前端自动化构建工具—Gulp/"/>
+
+
+
+
+
+  <title> 前端自动化构建工具—Gulp | 红尘之中一单骑的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">红尘之中一单骑的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/10/前端自动化构建工具—Gulp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="孟 威">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="红尘之中一单骑的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                前端自动化构建工具—Gulp
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-10T17:53:00+08:00">
+                2017-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="第一步：安装Node"><a href="#第一步：安装Node" class="headerlink" title="第一步：安装Node"></a>第一步：安装Node</h1><p>首先，最基本也最重要的是，我们需要搭建<code>node</code>环境。访问<a href="https://nodejs.org/en/" target="_blank" rel="external">https://nodejs.org/en/</a>，然后点击<code>install</code>按钮，下载完成后直接运行程序，就一切准备就绪。<code>npm</code>会随着安装包一起安装，稍后会用到它。</p>
+<h1 id="第二步：使用命令行"><a href="#第二步：使用命令行" class="headerlink" title="第二步：使用命令行"></a>第二步：使用命令行</h1><p>也许现在你还不是很了解什么是命令行——OSX中的终端（<code>Terminal</code>），windows中的命令提示符（<code>Command Prompt</code>），但很快你就会知道。它看起来没那么简单，但一旦掌握了它的窍门，就可以很方便的执行很多命令行程序，比如<code>Sass</code>，<code>Yeoman</code>和<code>Git</code>等，这些都是非常有用的工具。</p>
+<blockquote>
+<p>如果你很熟悉命令行，直接跳到步骤四。</p>
+</blockquote>
+<p>为了确保Node已经正确安装，我们执行几个简单的命令。</p>
+<p><code>node -v</code></p>
+<p>回车（Enter），如果正确安装的话，你会看到所安装的Node的版本号，接下来看看<code>npm</code>。</p>
+<p><code>npm -v</code></p>
+<p>这同样能得到<code>npm</code>的版本号。</p>
+<p>如果这两行命令没有得到返回，可能<code>node</code>就没有安装正确，尝试重启下命令行工具，如果还不行的话，只能回到第一步进行重装。</p>
+<h1 id="第三步：定位到项目"><a href="#第三步：定位到项目" class="headerlink" title="第三步：定位到项目"></a>第三步：定位到项目</h1><p>现在，我们已经大致了解了命令行并且知道如何简单使用它，接下来只需要两个简单的命令就能定位到文件目录并看看目录里都有些什么文件。</p>
+<p><code>cd</code>，定位到目录<br><code>ls</code>，列出文件列表</p>
+<blockquote>
+<p>建议多敲敲这两个命令，了解文件系统并知道文件都在哪里。</p>
+</blockquote>
+<p>习惯使用了这两个命令后，就要进入我们的项目目录，这个目录各不相同，举个例子，这是我进入我项目目录的命令：</p>
+<p><code>cd /Applications/my-project</code></p>
+<p>成功进入项目目录后，我们开始安装<code>gulp</code>。</p>
+<h1 id="第四步：安装gulp"><a href="#第四步：安装gulp" class="headerlink" title="第四步：安装gulp"></a>第四步：安装<code>gulp</code></h1><p>我们已经知道如何使用命令行，现在尝试点新的东西，认识<code>npm</code>然后安装<code>gulp</code>。</p>
+<p><code>npm</code>是基于命令行的<code>node</code>包管理工具，它可以将<code>node</code>的程序模块安装到项目中，在它的官网中可以查看和搜索所有可用的程序模块。</p>
+<p>在命令行中输入<br><code>sudo npm install -g gulp</code><br><code>sudo</code>是以管理员身份执行命令，一般会要求输入电脑密码<br><code>npm</code>是安装<code>node</code>模块的工具，执行<code>install</code>命令<br><code>-g</code>表示在全局环境安装，以便任何项目都能使用它<br>最后，<code>gulp</code>是将要安装的<code>node</code>模块的名字<br>运行时注意查看命令行有没有错误信息，安装完成后，你可以使用下面的命令查看<code>gulp</code>的版本号以确保<code>gulp</code>已经被正确安装。</p>
+<p><code>gulp -v</code></p>
+<p>接下来，我们需要将<code>gulp</code>安装到项目本地</p>
+<p><code>npm install --save-dev gulp</code></p>
+<p>这里，我们使用<code>--save-dev</code>来更新<code>package.json</code>文件，更新<code>devDependencies</code>值，以表明项目需要依赖<code>gulp</code>。</p>
+<p><code>Dependencies</code>可以向其他参与项目的人指明项目在开发环境和生产环境中的<code>node</code>模块依懒关系，想要更加深入的了解它可以看看<a href="https://npmjs.org/doc/json.html#dependencies" target="_blank" rel="external">package.json</a>文档。</p>
+<h1 id="第五步：新建gulpfile文件，运行gulp"><a href="#第五步：新建gulpfile文件，运行gulp" class="headerlink" title="第五步：新建gulpfile文件，运行gulp"></a>第五步：新建<code>gulpfile</code>文件，运行<code>gulp</code></h1><p>安装好<code>gulp</code>后我们需要告诉它要为我们执行哪些任务，首先，我们自己需要弄清楚项目需要哪些任务。</p>
+<ul>
+<li>检查<code>JavaScript</code></li>
+<li>编译<code>Sass</code>（或<code>Less</code>之类的）文件</li>
+<li>合并<code>JavaScript</code></li>
+<li>压缩并重命名合并后的<code>JavaScript</code></li>
+</ul>
+<h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><p><code>npm install gulp-jshint gulp-sass gulp-concat gulp-uglify gulp-rename --save-dev</code><br>提醒下，如果以上命令提示权限错误，需要添加<code>sudo</code>再次尝试。</p>
+<h2 id="新建gulpfile文件"><a href="#新建gulpfile文件" class="headerlink" title="新建gulpfile文件"></a>新建<code>gulpfile</code>文件</h2><p>现在，组件都安装完毕，我们需要新建<code>gulpfile</code>文件以指定<code>gulp</code>需要为我们完成什么任务。</p>
+<p><code>gulp</code>只有五个方法：<code>task</code>，<code>run</code>，<code>watch</code>，<code>src</code>，和<code>dest</code>，在项目根目录新建一个js文件并命名为<code>gulpfile.js</code>，把下面的代码粘贴进去：</p>
+<p><code>gulpfile.js</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 引入 gulp</span></div><div class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>); </div><div class="line"></div><div class="line"><span class="comment">// 引入组件</span></div><div class="line"><span class="keyword">var</span> jshint = <span class="built_in">require</span>(<span class="string">'gulp-jshint'</span>);</div><div class="line"><span class="keyword">var</span> sass = <span class="built_in">require</span>(<span class="string">'gulp-sass'</span>);</div><div class="line"><span class="keyword">var</span> concat = <span class="built_in">require</span>(<span class="string">'gulp-concat'</span>);</div><div class="line"><span class="keyword">var</span> uglify = <span class="built_in">require</span>(<span class="string">'gulp-uglify'</span>);</div><div class="line"><span class="keyword">var</span> rename = <span class="built_in">require</span>(<span class="string">'gulp-rename'</span>);</div><div class="line"></div><div class="line"><span class="comment">// 检查脚本</span></div><div class="line">gulp.task(<span class="string">'lint'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    gulp.src(<span class="string">'./js/*.js'</span>)</div><div class="line">        .pipe(jshint())</div><div class="line">        .pipe(jshint.reporter(<span class="string">'default'</span>));</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// 编译Sass</span></div><div class="line">gulp.task(<span class="string">'sass'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    gulp.src(<span class="string">'./scss/*.scss'</span>)</div><div class="line">        .pipe(sass())</div><div class="line">        .pipe(gulp.dest(<span class="string">'./css'</span>));</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// 合并，压缩文件</span></div><div class="line">gulp.task(<span class="string">'scripts'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    gulp.src(<span class="string">'./js/*.js'</span>)</div><div class="line">        .pipe(concat(<span class="string">'all.js'</span>))</div><div class="line">        .pipe(gulp.dest(<span class="string">'./dist'</span>))</div><div class="line">        .pipe(rename(<span class="string">'all.min.js'</span>))</div><div class="line">        .pipe(uglify())</div><div class="line">        .pipe(gulp.dest(<span class="string">'./dist'</span>));</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// 默认任务</span></div><div class="line">gulp.task(<span class="string">'default'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    gulp.run(<span class="string">'lint'</span>, <span class="string">'sass'</span>, <span class="string">'scripts'</span>);</div><div class="line"></div><div class="line">    <span class="comment">// 监听文件变化</span></div><div class="line">    gulp.watch(<span class="string">'./js/*.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        gulp.run(<span class="string">'lint'</span>, <span class="string">'sass'</span>, <span class="string">'scripts'</span>);</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>现在，分段解释下这段代码。</p>
+<h2 id="引入组件"><a href="#引入组件" class="headerlink" title="引入组件"></a>引入组件</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>); </div><div class="line"></div><div class="line"><span class="keyword">var</span> jshint = <span class="built_in">require</span>(<span class="string">'gulp-jshint'</span>);</div><div class="line"><span class="keyword">var</span> sass = <span class="built_in">require</span>(<span class="string">'gulp-sass'</span>);</div><div class="line"><span class="keyword">var</span> concat = <span class="built_in">require</span>(<span class="string">'gulp-concat'</span>);</div><div class="line"><span class="keyword">var</span> uglify = <span class="built_in">require</span>(<span class="string">'gulp-uglify'</span>);</div><div class="line"><span class="keyword">var</span> rename = <span class="built_in">require</span>(<span class="string">'gulp-rename'</span>);</div></pre></td></tr></table></figure>
+<p>这一步，我们引入了核心的<code>gulp</code>和其他依赖组件，接下来，分开创建<code>lint</code>, <code>sass</code>, <code>scripts</code> 和 <code>default</code>这四个不同的任务。</p>
+<h2 id="Lint任务"><a href="#Lint任务" class="headerlink" title="Lint任务"></a>Lint任务</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">gulp.task(<span class="string">'lint'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    gulp.src(<span class="string">'./js/*.js'</span>)</div><div class="line">        .pipe(jshint())</div><div class="line">        .pipe(jshint.reporter(<span class="string">'default'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>Link任务会检查<code>js/</code>目录下得<code>js</code>文件有没有报错或警告。</p>
+<h2 id="Sass任务"><a href="#Sass任务" class="headerlink" title="Sass任务"></a>Sass任务</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">gulp.task(<span class="string">'sass'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    gulp.src(<span class="string">'./scss/*.scss'</span>)</div><div class="line">        .pipe(sass())</div><div class="line">        .pipe(gulp.dest(<span class="string">'./css'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>Sass任务会编译<code>scss/</code>目录下的<code>scss</code>文件，并把编译完成的<code>css</code>文件保存到<code>/css</code>目录中。</p>
+<h2 id="Scripts任务"><a href="#Scripts任务" class="headerlink" title="Scripts任务"></a>Scripts任务</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">gulp.task(<span class="string">'scripts'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    gulp.src(<span class="string">'./js/*.js'</span>)</div><div class="line">        .pipe(concat(<span class="string">'all.js'</span>))</div><div class="line">        .pipe(gulp.dest(<span class="string">'./dist'</span>))</div><div class="line">        .pipe(rename(<span class="string">'all.min.js'</span>))</div><div class="line">        .pipe(uglify())</div><div class="line">        .pipe(gulp.dest(<span class="string">'./dist'</span>));</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>scripts任务会合并<code>js/</code>目录下得所有得js文件并输出到<code>dist/</code>目录，然后<code>gulp</code>会重命名、压缩合并的文件，也输出到<code>dist/</code>目录。</p>
+<h2 id="default任务"><a href="#default任务" class="headerlink" title="default任务"></a>default任务</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">gulp.task(<span class="string">'default'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    gulp.run(<span class="string">'lint'</span>, <span class="string">'sass'</span>, <span class="string">'scripts'</span>);</div><div class="line">    gulp.watch(<span class="string">'./js/*.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        gulp.run(<span class="string">'lint'</span>, <span class="string">'sass'</span>, <span class="string">'scripts'</span>);</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>这时，我们创建了一个基于其他任务的<code>default</code>任务。使用<code>.run()</code>方法关联和运行我们上面定义的任务，使用<code>.watch()</code>方法去监听指定目录的文件变化，当有文件变化时，会运行回调定义的其他任务。</p>
+<p>现在，回到命令行，可以直接运行<code>gulp</code>任务了。</p>
+<p><code>gulp</code></p>
+<p>这将执行定义的<code>default</code>任务，换言之，这和以下的命令式同一个意思</p>
+<p><code>gulp default</code></p>
+<p>当然，我们可以运行在<code>gulpfile.js</code>中定义的任意任务，比如，现在运行<code>sass</code>任务：</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>现在已经做到了设置<code>gulp</code>任务然后运行他们，现在再回顾下之前学习的：</p>
+<ol>
+<li>安装<code>Node</code>环境</li>
+<li>简单使用命令行</li>
+<li>用命令行进入项目目录</li>
+<li>使用<code>npm</code>和安装<code>gulp</code></li>
+<li>如何运行<code>gulp</code>任务</li>
+</ol>
+<p>另外，有一些参考资源供进一步学习：<br><a href="https://npmjs.org/search?q=gulpplugin" target="_blank" rel="external">npm上的gulp组件</a><br><a href="https://github.com/wearefractal/gulp" target="_blank" rel="external">gulp的Github主页</a><br><a href="https://npmjs.org/doc/json.html" target="_blank" rel="external">官方package.json文档</a></p>
+<blockquote>
+<p>原文链接：<a href="https://segmentfault.com/a/1190000000372547" target="_blank" rel="external">https://segmentfault.com/a/1190000000372547</a><br>英文原文：<a href="http://travismaynard.com/writing/getting-started-with-gulp" target="_blank" rel="external">http://travismaynard.com/writing/getting-started-with-gulp</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/10/前端自动化构建工具—Grunt/" rel="next" title="前端自动化构建工具—Grunt">
+                <i class="fa fa-chevron-left"></i> 前端自动化构建工具—Grunt
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/28/AJAX/" rel="prev" title="AJAX">
+                AJAX <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="孟 威" />
+          <p class="site-author-name" itemprop="name">孟 威</p>
+           
+              <p class="site-description motion-element" itemprop="description">深处种菱浅种稻，不深不浅种荷花</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一步：安装Node"><span class="nav-number">1.</span> <span class="nav-text">第一步：安装Node</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二步：使用命令行"><span class="nav-number">2.</span> <span class="nav-text">第二步：使用命令行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三步：定位到项目"><span class="nav-number">3.</span> <span class="nav-text">第三步：定位到项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第四步：安装gulp"><span class="nav-number">4.</span> <span class="nav-text">第四步：安装gulp</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第五步：新建gulpfile文件，运行gulp"><span class="nav-number">5.</span> <span class="nav-text">第五步：新建gulpfile文件，运行gulp</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装依赖"><span class="nav-number">5.1.</span> <span class="nav-text">安装依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新建gulpfile文件"><span class="nav-number">5.2.</span> <span class="nav-text">新建gulpfile文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引入组件"><span class="nav-number">5.3.</span> <span class="nav-text">引入组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lint任务"><span class="nav-number">5.4.</span> <span class="nav-text">Lint任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sass任务"><span class="nav-number">5.5.</span> <span class="nav-text">Sass任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scripts任务"><span class="nav-number">5.6.</span> <span class="nav-text">Scripts任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#default任务"><span class="nav-number">5.7.</span> <span class="nav-text">default任务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束语"><span class="nav-number">6.</span> <span class="nav-text">结束语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">孟 威</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

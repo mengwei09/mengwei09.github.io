@@ -1,0 +1,757 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端,JavaScript," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Identifier Resolution and Closures in the JavaScript Scope ChainFrom my previous post, we now know that every function has an associated execution context that contains a variable object [VO], which i">
+<meta name="keywords" content="前端,JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Identifier Resolution and Closures in the JavaScript Scope Chain">
+<meta property="og:url" content="http://yoursite.com/2017/03/03/Identifier-Resolution-and-Closures-in-the-JavaScript-Scope-Chain/index.html">
+<meta property="og:site_name" content="红尘之中一单骑的博客">
+<meta property="og:description" content="Identifier Resolution and Closures in the JavaScript Scope ChainFrom my previous post, we now know that every function has an associated execution context that contains a variable object [VO], which i">
+<meta property="og:image" content="http://davidshariff.com/blog/wp-content/uploads/2012/06/stack14.jpg">
+<meta property="og:image" content="http://davidshariff.com/blog/wp-content/uploads/2012/06/scopechain1.png">
+<meta property="og:updated_time" content="2017-05-17T14:44:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Identifier Resolution and Closures in the JavaScript Scope Chain">
+<meta name="twitter:description" content="Identifier Resolution and Closures in the JavaScript Scope ChainFrom my previous post, we now know that every function has an associated execution context that contains a variable object [VO], which i">
+<meta name="twitter:image" content="http://davidshariff.com/blog/wp-content/uploads/2012/06/stack14.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/03/Identifier-Resolution-and-Closures-in-the-JavaScript-Scope-Chain/"/>
+
+
+
+
+
+  <title> Identifier Resolution and Closures in the JavaScript Scope Chain | 红尘之中一单骑的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">红尘之中一单骑的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/03/Identifier-Resolution-and-Closures-in-the-JavaScript-Scope-Chain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="孟 威">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="红尘之中一单骑的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Identifier Resolution and Closures in the JavaScript Scope Chain
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-03T19:10:07+08:00">
+                2017-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Identifier-Resolution-and-Closures-in-the-JavaScript-Scope-Chain"><a href="#Identifier-Resolution-and-Closures-in-the-JavaScript-Scope-Chain" class="headerlink" title="Identifier Resolution and Closures in the JavaScript Scope Chain"></a>Identifier Resolution and Closures in the JavaScript Scope Chain</h3><p>From my previous post, we now know that every function has an associated <code>execution context</code> that contains a <code>variable object [VO]</code>, which is composed of all the variables, functions and parameters defined inside that given local function.</p>
+<p>The <code>scope chain</code> property of each <code>execution context</code> is simply a collection of the current <code>context&#39;s [VO] + all parent’s lexical [VO]s</code>.</p>
+<p><code>Scope = VO + All Parent VOs</code><br><code>Eg: scopeChain = [ [VO] + [VO1] + [VO2] + [VO n+1] ];</code></p>
+<h3 id="Determining-a-Scope-Chain’s-Variable-Objects-VO-s"><a href="#Determining-a-Scope-Chain’s-Variable-Objects-VO-s" class="headerlink" title="Determining a Scope Chain’s Variable Objects [VO]s"></a>Determining a Scope Chain’s Variable Objects [VO]s</h3><p>We now know that the first <code>[VO]</code> of the scope chain belongs to the current execution context, and we can find the remaining parent <code>[VO]s</code> by looking at the parent context’s scope chain:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">one</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    two();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">two</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">        three();</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">three</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            alert(<span class="string">'I am at function three'</span>);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">one();</div></pre></td></tr></table></figure>
+<p><img src="http://davidshariff.com/blog/wp-content/uploads/2012/06/stack14.jpg" alt="img1"><br>The example is straight forward, starting from the global context we call <code>one()</code>, <code>one()</code> calls <code>two()</code>, which in turn calls  <code>three()</code>, thus alerting that it is at function three. The image above shows the call stack at function <code>three</code> at the time <code>alert(&#39;I am at function three&#39;)</code> is fired. We can see that the <code>scope chain</code> at this point in time looks as follows:</p>
+<p><code>three() Scope Chain = [ [three() VO] + [two() VO] + [one() VO] + [Global VO] ];</code></p>
+<h3 id="Lexical-Scope"><a href="#Lexical-Scope" class="headerlink" title="Lexical Scope"></a>Lexical Scope</h3><p>An important feature of JavaScript to note, is that the interpreter uses <code>Lexical Scoping</code>, as opposed to <code>Dynamic Scoping</code>. This is just a complicated way of saying all inner functions, are statically (lexically) bound to the parent context in which the inner function was physically defined in the program code.</p>
+<p>In our previous example above, it does not matter in which sequence the inner functions are called.  <code>three()</code> will always be statically bound to <code>two()</code>, which in turn will always be bound to <code>one()</code> and so on and so forth. This gives a chaining effect where all inner functions can access the outer functions’ <code>VO</code> through the statically bound <code>Scope Chain</code>.</p>
+<p>This <code>lexical scope</code> is the source of confusion for many developers. We know that every invocation of a function will create a new <code>execution context</code> and associated <code>VO</code>, which holds the values of variables evaluated in the current context.</p>
+<p>It is this dynamic, runtime evaluation of the <code>VO</code> paired with the lexical (static) defined scope of each context that leads unexpected results in program behaviour. Take the following classic example:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myAlerts = [];</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</div><div class="line">    myAlerts.push(</div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">inner</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            alert(i);</div><div class="line">        &#125;</div><div class="line">    );</div><div class="line">&#125;</div><div class="line"></div><div class="line">myAlerts[<span class="number">0</span>](); <span class="comment">// 5</span></div><div class="line">myAlerts[<span class="number">1</span>](); <span class="comment">// 5</span></div><div class="line">myAlerts[<span class="number">2</span>](); <span class="comment">// 5</span></div><div class="line">myAlerts[<span class="number">3</span>](); <span class="comment">// 5</span></div><div class="line">myAlerts[<span class="number">4</span>](); <span class="comment">// 5</span></div></pre></td></tr></table></figure>
+<p>At first glance, those new to JavaScript would assume <code>alert(i)</code>; to be the value of <code>i</code> on each increment where the function was physically defined in the source code, alerting 1, 2, 3, 4 and 5 respectively.</p>
+<p>This is the most common point of confusion. Function <code>inner</code> was created in the <code>global context</code>, therefore its scope chain is statically bound to the <code>global context</code>.</p>
+<p>Lines 11 ~ 15 invoke <code>inner()</code>, which looks in <code>inner.ScopeChain</code> to resolve <code>i</code>, which is located in the <code>global context</code>. At the time of each invocation, <code>i</code>, has already been incremented to 5, giving the same result every time <code>inner()</code> is called. The statically bound <code>scope chain</code>, which holds <code>[VOs]</code> from each context containing live variables, often catches developers by surprise.</p>
+<h3 id="Resolving-the-value-of-variables"><a href="#Resolving-the-value-of-variables" class="headerlink" title="Resolving the value of variables"></a>Resolving the value of variables</h3><p>The following example alerts the value of variables <code>a</code>, <code>b</code> and <code>c</code>, which gives us a result of 6.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">one</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">    two();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">two</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">        <span class="keyword">var</span> b = <span class="number">2</span>;</div><div class="line">        three();</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">three</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">            <span class="keyword">var</span> c = <span class="number">3</span>;</div><div class="line">            alert(a + b + c); <span class="comment">// 6</span></div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">one()​;​</div></pre></td></tr></table></figure>
+<p>Line 14 is intriguing, at first glance it seems that <code>a</code> and <code>b</code> are not “inside” function <code>three</code>, so how can this code still work? To understand how the interpreter evaluates this code, we need to look at the <code>scope chain</code> of function <code>three</code> at the time line 14 was executed:</p>
+<p><img src="http://davidshariff.com/blog/wp-content/uploads/2012/06/scopechain1.png" alt="img1"></p>
+<p>When the interpreter executes line 14: <code>alert(a + b + c)</code>, it resolves a first by looking into the scope chain and checking the first <code>variable object</code>, <code>three&#39;s [VO]</code>. It checks to see if a exists inside <code>three&#39;s [VO]</code> but can not find any property with that name, so moves on to check the next <code>[VO]</code>.</p>
+<p>The interpreter keeps checking each <code>[VO]</code> in sequence for the existence of the variable name, in which case the value will be returned to the original evaluated code, or the program will throw a <code>ReferenceError</code> if none is found. Therefore, given the example above, you can see that <code>a</code>, <code>b</code> and <code>c</code> are all resolvable given function <code>three’s scope chain</code>.</p>
+<h3 id="How-does-this-work-with-closures"><a href="#How-does-this-work-with-closures" class="headerlink" title="How does this work with closures?"></a>How does this work with closures?</h3><p>In JavaScript, closures are often regarded as some sort of magical unicorn that only advanced developers can really understand, but truth be told it is just a simple understanding of the <code>scope chain</code>. A closure, as Crockford says, is simply:</p>
+<blockquote>
+<p>An inner function always has access to the vars and parameters of its outer function, even after the outer function has returned…</p>
+</blockquote>
+<p>The code below is an example of a closure:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> a = <span class="string">'private variable'</span>;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        alert(a);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> callAlert = foo();</div><div class="line"></div><div class="line">callAlert(); <span class="comment">// private variable</span></div></pre></td></tr></table></figure></p>
+<p>The <code>global context</code> has a function named <code>foo()</code> and a variable named <code>callAlert</code>, which holds the returned value of <code>foo()</code>. What often surprises and confuses developers is that the private variable, <code>a</code>, is still available even after <code>foo()</code> has finished executing.</p>
+<p>However, if we look at each of the context in detail, we will see the following:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Global Context when evaluated</span></div><div class="line">global.VO = &#123;</div><div class="line">    <span class="attr">foo</span>: pointer to foo(),</div><div class="line">    <span class="attr">callAlert</span>: returned value <span class="keyword">of</span> global.VO.foo</div><div class="line">    scopeChain: [global.VO]</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Foo Context when evaluated</span></div><div class="line">foo.VO = &#123;</div><div class="line">    <span class="attr">bar</span>: pointer to bar(),</div><div class="line">    <span class="attr">a</span>: <span class="string">'private variable'</span>,</div><div class="line">    <span class="attr">scopeChain</span>: [foo.VO, global.VO]</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Bar Context when evaluated</span></div><div class="line">bar.VO = &#123;</div><div class="line">    <span class="attr">scopeChain</span>: [bar.VO, foo.VO, global.VO]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Now we can see by invoking <code>callAlert()</code>, we get the function <code>foo()</code>, which returns the pointer to <code>bar()</code>. On entering <code>bar()</code>, <code>bar.VO.scopeChain</code> is <code>[bar.VO, foo.VO, global.VO]</code>.</p>
+<p>By alerting a, the interpreter checks the first <code>VO</code> in the <code>bar.VO.scopeChain</code> for a property named a but can not find a match, so promptly moves on to the next <code>VO</code>, <code>foo.VO</code>.</p>
+<p>It checks for the existence of the property and this time finds a match, returning the value back to the <code>bar</code>context, which explains why the <code>alert</code> gives us <code>&#39;private variable&#39;</code> even though <code>foo()</code> had finished executing sometime ago.</p>
+<p>By this point in the article, we have covered the details of the scope chain and its <code>lexical environment</code>, along with how <code>closures</code> and <code>variable resolution</code> work. The rest of this article looks at some interesting situations in relation to those covered above.</p>
+<h3 id="Wait-how-does-the-prototype-chain-affect-variable-resolution"><a href="#Wait-how-does-the-prototype-chain-affect-variable-resolution" class="headerlink" title="Wait, how does the prototype chain affect variable resolution?"></a>Wait, how does the prototype chain affect variable resolution?</h3><p>JavaScript is <code>prototypal</code> by nature and almost everything in the language, except for <code>null</code> and <code>undefined</code>, are <code>objects</code>. When trying to access a property on an <code>object</code>, the interpreter will try to resolve it by looking for the existence of the property in the <code>object</code>. If it can’t find the property, it will continue to look up the <code>prototype chain</code>, which is an inherited chain of objects, until it finds the property, or traversed to the end of the chain.</p>
+<p>This leads to an interesting question, does the interpreter resolve an object property using the <code>scope chain</code> or <code>prototype chain</code> first ? It uses both. When trying to resolve a property or identifier, the <code>scope chain</code> will be used first to locate the object. Once the object has been found, the <code>prototype chain</code> of that <code>object</code> will then be traversed looking for the property name. Let’s look at an example:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> bar = &#123;&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    bar.a = <span class="string">'Set from foo()'</span>;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">inner</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        alert(bar.a);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">foo()(); <span class="comment">// 'Set from foo()'</span></div></pre></td></tr></table></figure></p>
+<p>Line 5 creates the property <code>a</code> on the global object <code>bar</code>, and sets its value to <code>&#39;Set from foo()&#39;</code>. The interpreter looks into the <code>scope chain</code> and as expected finds <code>bar.a</code> in the <code>global context</code>. Now, lets consider the following:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> bar = &#123;&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="built_in">Object</span>.prototype.a = <span class="string">'Set from prototype'</span>;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">inner</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        alert(bar.a);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">foo()(); <span class="comment">// 'Set from prototype()'</span></div></pre></td></tr></table></figure></p>
+<p>At runtime, we invoke <code>inner()</code>, which tries to resolve <code>bar.a</code> by looking in its scope chain for the existence of <code>bar</code>. It finds <code>bar</code> in the <code>global context</code>, and proceeds to search bar for a property named <code>a</code>. However, <code>a</code> was never set on <code>bar</code>, so the interpreter traverses the object’s prototype chain and finds a was set on <code>Object.prototype</code>.</p>
+<p>It is this exact behavior which explains identifier resolution; locate the <code>object</code> in the <code>scope chain</code>, then proceed up the object’s <code>prototype chain</code> until the property is found, or returned undefined.</p>
+<h3 id="When-to-use-Closures"><a href="#When-to-use-Closures" class="headerlink" title="When to use Closures?"></a>When to use Closures?</h3><p>Closures are a powerful concept given to JavaScript and some of the most common situations to use them are:</p>
+<p><strong>Encapsulation</strong></p>
+<p>Allows us to hide the implementation details of a context from outside scopes, while exposing a controlled public interface. This is commonly referred to as the <a href="https://addyosmani.com/resources/essentialjsdesignpatterns/book/#modulepatternjavascript" target="_blank" rel="external">module pattern</a> or <a href="https://addyosmani.com/resources/essentialjsdesignpatterns/book/#revealingmodulepatternjavascript" target="_blank" rel="external">revealing module pattern</a>.</p>
+<p><strong>Callbacks</strong></p>
+<p>Perhaps one of the most powerful uses for closures are callbacks. JavaScript, in the browser, typically runs in a single threaded event loop, blocking other events from starting until one event has finished. Callbacks allow us to defer the invocation of a function, typically in response to an event completing, in a non-blocking manner. An example of this is when making an AJAX call to the server, using a callback to handle to response, while still maintaining the bindings in which it was created.</p>
+<p><strong>Closures as arguments</strong></p>
+<p>We can also pass closures as arguments to a function, which is a powerful functional paradigm for creating more graceful solutions for complex code. Take for example a minimum sort function. By passing closures as parameters, we could define the implementation for different types of data sorting, while still reusing a single function body as a schematic.</p>
+<h3 id="When-not-to-use-Closures"><a href="#When-not-to-use-Closures" class="headerlink" title="When not to use Closures ?"></a>When not to use Closures ?</h3><p>Although closures are powerful, they should be used sparingly due to some performance concerns:</p>
+<p><strong>Large scope lengths</strong></p>
+<p>Multiple nested functions are a typical sign that you might run into some performance issues. Remember, every time you need to evaluate a variable, the Scope Chain must be traversed to find the identifier, so it goes without saying that the further down the chain the variable is defined, the longer to lookup time.</p>
+<p><strong>Garbage collection</strong></p>
+<p>JavaScript is a <code>garbage collected</code> language, which means developers generally don’t have to worry about memory management, unlike lower level programming languages. However, this automatic garbage collection often leads developers application to suffer from poor performance and memory leaks.</p>
+<p>Different JavaScript engines implement garbage collection slightly different, since ECMAScript does not define how the implementation should be handled, but the same philosophy can apply across engines when trying to create high performance, leak free JavaScript code. Generally speaking, the garbage collector will try to free the memory of objects when they can not be referenced by any other live object running in the program, or are unreachable.</p>
+<p><strong>Circular references</strong></p>
+<p>This leads us to closures, and the possibility of circular references in a program, which is a term used to describe a situation where one object references another object, and that object points back to the first object. Closures are especially susceptible to leaks, remember that an inner function can reference a variable defined further up the scope chain even after the parent has finished executing and returned. Most JavaScript engines handle these situations quite well (damn you IE), but it’s still worth noting and taking into consideration when doing your development.</p>
+<p>For older versions of IE, referencing a DOM element would often cause you memory leaks. Why? In IE, the JavaScript (JScript ?) engine and DOM both have their own individual garbage collector. So when referencing a DOM element from JavaScript, the native collector hands off to the DOM and the DOM collector points back to native, resulting in neither collector knowing about the circular reference.</p>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><p>From working with many developers over the past few years, I often found that the concepts of <code>scope chain</code> and <code>closures</code> were known about, but not truly understood in detail. I hope this article has helped to take you from knowing the basic concept, to an understanding in more detail and depth.</p>
+<p>Going forward, you should be armed with all the knowledge you need to determine how the resolution of variables, in any situation, works when writing your JavaScript. Happy coding!</p>
+<blockquote>
+<p>原文链接：<a href="http://davidshariff.com/blog/javascript-scope-chain-and-closures/" target="_blank" rel="external">http://davidshariff.com/blog/javascript-scope-chain-and-closures/</a></p>
+</blockquote>
+<hr>
+<p><a href="https://zh.wikipedia.org/wiki/%E9%97%AD%E5%8C%85_%28%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%29" target="_blank" rel="external">闭包-维基百科</a></p>
+<blockquote>
+<p>在计算机科学中，闭包（英语：Closure），又称词法闭包（Lexical Closure）或函数闭包（function closures），是引用了自由变量的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/01/What-is-the-Execution-Context-&-Stack-in-JavaScript/" rel="next" title="What is the Execution Context & Stack in JavaScript?">
+                <i class="fa fa-chevron-left"></i> What is the Execution Context & Stack in JavaScript?
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/10/JavaScript-this-Keyword/" rel="prev" title="JavaScript's 'this' Keyword">
+                JavaScript's 'this' Keyword <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="孟 威" />
+          <p class="site-author-name" itemprop="name">孟 威</p>
+           
+              <p class="site-description motion-element" itemprop="description">深处种菱浅种稻，不深不浅种荷花</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Identifier-Resolution-and-Closures-in-the-JavaScript-Scope-Chain"><span class="nav-number">1.</span> <span class="nav-text">Identifier Resolution and Closures in the JavaScript Scope Chain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Determining-a-Scope-Chain’s-Variable-Objects-VO-s"><span class="nav-number">2.</span> <span class="nav-text">Determining a Scope Chain’s Variable Objects [VO]s</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lexical-Scope"><span class="nav-number">3.</span> <span class="nav-text">Lexical Scope</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Resolving-the-value-of-variables"><span class="nav-number">4.</span> <span class="nav-text">Resolving the value of variables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-does-this-work-with-closures"><span class="nav-number">5.</span> <span class="nav-text">How does this work with closures?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Wait-how-does-the-prototype-chain-affect-variable-resolution"><span class="nav-number">6.</span> <span class="nav-text">Wait, how does the prototype chain affect variable resolution?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#When-to-use-Closures"><span class="nav-number">7.</span> <span class="nav-text">When to use Closures?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#When-not-to-use-Closures"><span class="nav-number">8.</span> <span class="nav-text">When not to use Closures ?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary"><span class="nav-number">9.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">孟 威</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,717 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端,JavaScript," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="JavaScript’s ‘this’ KeywordA commonly used feature of JavaScript is the this keyword, but it is often also one of the most confused and misinterpreted features of the language. What does this actually">
+<meta name="keywords" content="前端,JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript&#39;s &#39;this&#39; Keyword">
+<meta property="og:url" content="http://yoursite.com/2017/03/10/JavaScript-this-Keyword/index.html">
+<meta property="og:site_name" content="红尘之中一单骑的博客">
+<meta property="og:description" content="JavaScript’s ‘this’ KeywordA commonly used feature of JavaScript is the this keyword, but it is often also one of the most confused and misinterpreted features of the language. What does this actually">
+<meta property="og:image" content="http://yoursite.com/images/20170510223307.png">
+<meta property="og:image" content="http://yoursite.com/images/20170510175555.png">
+<meta property="og:image" content="http://yoursite.com/images/20170510175655.png">
+<meta property="og:updated_time" content="2017-05-10T17:05:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript&#39;s &#39;this&#39; Keyword">
+<meta name="twitter:description" content="JavaScript’s ‘this’ KeywordA commonly used feature of JavaScript is the this keyword, but it is often also one of the most confused and misinterpreted features of the language. What does this actually">
+<meta name="twitter:image" content="http://yoursite.com/images/20170510223307.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/10/JavaScript-this-Keyword/"/>
+
+
+
+
+
+  <title> JavaScript's 'this' Keyword | 红尘之中一单骑的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">红尘之中一单骑的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/10/JavaScript-this-Keyword/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="孟 威">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="红尘之中一单骑的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JavaScript's 'this' Keyword
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-10T17:33:15+08:00">
+                2017-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="JavaScript’s-‘this’-Keyword"><a href="#JavaScript’s-‘this’-Keyword" class="headerlink" title="JavaScript’s ‘this’ Keyword"></a>JavaScript’s ‘this’ Keyword</h2><p>A commonly used feature of JavaScript is the <code>this</code> keyword, but it is often also one of the most confused and misinterpreted features of the language. What does <code>this</code> actually mean and how is it decided?</p>
+<p>This article tries to clear up the confusion and explain the answer in a clear fashion.</p>
+<p>The <code>this</code> keyword is not new to those who have programmed in other languages, and more often than not it refers to the new object created when instantiating a class via it’s constructor. For example, if I have a class <code>Boat()</code>, which has a method <code>moveBoat()</code>, when refering to <code>this</code> inside of the <code>moveBoat()</code> method, we are actually accessing the newly created object of <code>Boat()</code>.</p>
+<p>In JavaScript, we also have <code>this</code> concept inside a <code>function constructor</code> when it is invoked using the “new” keyword, however it is not the only rule and <code>this</code> can often refer to a different object from a different <code>execution context</code>. If you are not familiar with JavaScript’s <code>execution context</code>, I recommend you read my other post on the topic <a href="http://davidshariff.com/blog/what-is-the-execution-context-in-javascript/" target="_blank" rel="external">here</a>. Enough talking, let’s see some JavaScript examples:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// global scope</span></div><div class="line"></div><div class="line">foo = <span class="string">'abc'</span>;</div><div class="line">alert(foo); <span class="comment">// abc</span></div><div class="line"></div><div class="line"><span class="keyword">this</span>.foo = <span class="string">'def'</span>;</div><div class="line">alert(foo); <span class="comment">// def</span></div></pre></td></tr></table></figure></p>
+<p>Whenever you use the keyword <code>this</code> in the global context (not inside a function), it always refers to the global object. Now let’s look at the value of <code>this</code> inside a function:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> boat = &#123;</div><div class="line">    <span class="attr">size</span>: <span class="string">'normal'</span>,</div><div class="line">    <span class="attr">boatInfo</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        alert(<span class="keyword">this</span> === boat);</div><div class="line">        alert(<span class="keyword">this</span>.size);</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">boat.boatInfo(); <span class="comment">// true, 'normal'</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> bigBoat = &#123;</div><div class="line">    <span class="attr">size</span>: <span class="string">'big'</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line">bigBoat.boatInfo = boat.boatInfo;</div><div class="line">bigBoat.boatInfo(); <span class="comment">// false, 'big'</span></div></pre></td></tr></table></figure></p>
+<p><img src="/images/20170510223307.png" alt=""><br>So how is <code>this</code> determined above? We can see an object boat which has a property <code>size</code> and a method <code>boatInfo()</code>. Inside <code>boatInfo()</code>, it alerts if the value of <code>this</code> is the actual boat object, and also alerts the <code>size</code> property of <code>this</code>. So, we invoke the function using <code>boat.boatInfo()</code> and can see that <code>this</code> is the boat object and the <code>size</code> property of the boat is normal.</p>
+<p>We then create another object, <code>bigBoat</code>, which has a <code>size</code> property of big. However, the bigBoat object does not have a <code>boatInfo()</code> method, so we copy the method from boat using <code>bigBoat.boatInfo = boat.boatInfo</code>. Now, when we call <code>bigBoat.boatInfo()</code> and enter the function, we see that <code>this</code> is not equal to boat and that <code>size</code> property is now big. Why did this happen? How did the value of <code>this</code> change inside <code>boatInfo()</code>?</p>
+<p>The first thing you must realise is that <strong>the value of <code>this</code> inside any function is never static, it is always determined every time you call a function, but before the function actually executes it’s code</strong>. The value of <code>this</code> inside a function is actually provided by the <code>parent scope</code> in which the function was called, and more importantly, how the actual function syntax was written.</p>
+<p>Whenever a function is called, we must look at the immediate left side of the brackets / parentheses <code>()</code>. If on the left side of the parentheses we can see a reference, then the value of <code>this</code> passed to the function call is exactly of which that object belongs to, otherwise it is the global object. Let’s see some examples:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    alert(<span class="keyword">this</span>);</div><div class="line">&#125;</div><div class="line">bar(); <span class="comment">// global - because the method bar() belongs to the global object when invoked</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> foo = &#123;</div><div class="line">    <span class="attr">baz</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        alert(<span class="keyword">this</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">foo.baz(); <span class="comment">// foo - because the method baz() belongs to the object foo when invoked</span></div></pre></td></tr></table></figure></p>
+<p>If things are clear this far, then the above code obviously makes sense. We can further complicate things by changing the value of <code>this</code> inside the very same function, by writing the call / invoke syntax in 2 different ways:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> foo = &#123;</div><div class="line">    <span class="attr">baz</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        alert(<span class="keyword">this</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">foo.baz(); <span class="comment">// foo - because baz belongs to the foo object when invoked</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> anotherBaz = foo.baz;</div><div class="line">anotherBaz(); <span class="comment">// global - because the method anotherBaz() belongs to the global object when invoked, NOT foo</span></div></pre></td></tr></table></figure></p>
+<p>Here, we see the value of <code>this</code> inside <code>baz()</code> was different each time, as it was syntactically called in 2 different ways. Now, let’s see the value of <code>this</code> inside a deeply nested object:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> anum = <span class="number">0</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> foo = &#123;</div><div class="line">    <span class="attr">anum</span>: <span class="number">10</span>,</div><div class="line">    <span class="attr">baz</span>: &#123;</div><div class="line">        <span class="attr">anum</span>: <span class="number">20</span>,</div><div class="line">        <span class="attr">bar</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="keyword">this</span>.anum);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">foo.baz.bar(); <span class="comment">// 20 - because left side of () is bar, which belongs to baz object when invoked</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> hello = foo.baz.bar;</div><div class="line">hello(); <span class="comment">// 0 - because left side of () is hello, which belongs to global object when invoked</span></div></pre></td></tr></table></figure></p>
+<p>Another question often asked is how is the keyword <code>this</code> determined inside an <code>event handler</code>? The answer is <strong><code>this</code> inside of an <code>event handler</code> always refers to the element it was triggered on</strong>. Let’s see an example:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"test"</span>&gt;</span>I am an element with id #test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doAlert</span>(<span class="params"></span>) </span>&#123; </div><div class="line">    alert(<span class="keyword">this</span>.innerHTML); </div><div class="line">&#125; </div><div class="line"></div><div class="line">doAlert(); <span class="comment">// undefined </span></div><div class="line"></div><div class="line"><span class="keyword">var</span> myElem = <span class="built_in">document</span>.getElementById(<span class="string">'test'</span>); </div><div class="line">myElem.onclick = doAlert; </div><div class="line"></div><div class="line">alert(myElem.onclick === doAlert); <span class="comment">// true </span></div><div class="line">myElem.onclick(); <span class="comment">// I am an element with id #test</span></div></pre></td></tr></table></figure>
+<p>Here we can see that when <code>doAlert()</code> is first called, it alerts <code>undefined</code>, as <code>doAlert()</code> belongs to the global object. We then write <code>myElem.onclick = doAlert</code>, which copies the function <code>doAlert()</code> to the <code>onclick()</code> event of <code>myElem</code>. This basically means that whenever <code>onclick()</code> is activated, it is a method of <code>myElem</code>, meaning the value of <code>this</code> will be the <code>myElem</code> object exactly.</p>
+<p>One last thing I want to note on this topic, is that the value of <code>this</code> can also be manually set using <code>call()</code> and <code>apply()</code>, overriding what we have discussed here today. Also of interested is that when calling <code>this</code> inside a <code>function constructor</code>, <code>this</code> refers to the newly created object in all instances inside the constructor. The reason for that is the function constructor is invoked with the “new” keyword, which creates a new object where <code>this</code> inside the constructor always refers to the new object just created.</p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>Hopefully today’s blog post has cleared up any misunderstanding of the <code>this</code> keyword and you can go forth always knowing the correct value of <code>this</code>. <strong>We now know that the value of <code>this</code> is never static and has a different value depending on how the function was invoked</strong>.</p>
+<hr>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name = <span class="string">"The Window"</span>;</div><div class="line"><span class="keyword">var</span> object = &#123;</div><div class="line">　　<span class="attr">name</span> : <span class="string">"My Object"</span>,</div><div class="line">　　<span class="attr">getNameFunc</span> : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">　　	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.name;</div><div class="line">　　　　&#125;;</div><div class="line">　　&#125;</div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log(object.getNameFunc()()); <span class="comment">// The Window (在非严格模式下)</span></div></pre></td></tr></table></figure>
+<p><img src="/images/20170510175555.png" alt=""><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name = <span class="string">"The Window"</span>;</div><div class="line"><span class="keyword">var</span> object = &#123;</div><div class="line">　　<span class="attr">name</span> : <span class="string">"My Object"</span>,</div><div class="line">　　<span class="attr">getNameFunc</span> : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">　　　　<span class="keyword">var</span> that = <span class="keyword">this</span>;</div><div class="line">　　　　<span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">　　　　　　<span class="keyword">return</span> that.name;</div><div class="line">　　　　&#125;;</div><div class="line">　　&#125;</div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log(object.getNameFunc()()); <span class="comment">// My Object</span></div></pre></td></tr></table></figure></p>
+<p><img src="/images/20170510175655.png" alt=""></p>
+<hr>
+<p>原文链接：<a href="http://davidshariff.com/blog/javascript-this-keyword/" target="_blank" rel="external">JavaScript’s ‘this’ Keyword</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/03/Identifier-Resolution-and-Closures-in-the-JavaScript-Scope-Chain/" rel="next" title="Identifier Resolution and Closures in the JavaScript Scope Chain">
+                <i class="fa fa-chevron-left"></i> Identifier Resolution and Closures in the JavaScript Scope Chain
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/15/Bootstrap栅格系统/" rel="prev" title="Bootstrap栅格系统">
+                Bootstrap栅格系统 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="孟 威" />
+          <p class="site-author-name" itemprop="name">孟 威</p>
+           
+              <p class="site-description motion-element" itemprop="description">深处种菱浅种稻，不深不浅种荷花</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript’s-‘this’-Keyword"><span class="nav-number">1.</span> <span class="nav-text">JavaScript’s ‘this’ Keyword</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary"><span class="nav-number">2.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">孟 威</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

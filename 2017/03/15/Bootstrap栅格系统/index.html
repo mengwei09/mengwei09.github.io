@@ -1,0 +1,715 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端,Bootstrap," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="CONTAINERContainer有两个作用：  在随时可能的宽度变化(响应式)中提供宽度限制。当页面宽度变化，container 的宽度也随之变化。并且其中的 column 的宽度是基于百分比，所以他们的值不需要变化。 提供一个水平方向的 padding，使其内部的内容不会接触到浏览器的边界，大小为15px，就是图片中粉红色的部分，作用会在下面说。  注意，不需要也不应该在 container">
+<meta name="keywords" content="前端,Bootstrap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bootstrap栅格系统">
+<meta property="og:url" content="http://yoursite.com/2017/03/15/Bootstrap栅格系统/index.html">
+<meta property="og:site_name" content="红尘之中一单骑的博客">
+<meta property="og:description" content="CONTAINERContainer有两个作用：  在随时可能的宽度变化(响应式)中提供宽度限制。当页面宽度变化，container 的宽度也随之变化。并且其中的 column 的宽度是基于百分比，所以他们的值不需要变化。 提供一个水平方向的 padding，使其内部的内容不会接触到浏览器的边界，大小为15px，就是图片中粉红色的部分，作用会在下面说。  注意，不需要也不应该在 container">
+<meta property="og:image" content="https://segmentfault.com/image?src=http://www.helloerik.com/wp-content/uploads/image-1.png&objectId=1190000000743553&token=f1609d392bd86b909dec84d37ced60dc">
+<meta property="og:image" content="https://segmentfault.com/image?src=http://www.helloerik.com/wp-content/uploads/image-2.png&objectId=1190000000743553&token=7c67b580e7146a42924aebca0ffb9f7b">
+<meta property="og:image" content="https://segmentfault.com/image?src=http://www.helloerik.com/wp-content/uploads/image-3.png&objectId=1190000000743553&token=8fe037cc7d1cf17194a0a699a326c17c">
+<meta property="og:image" content="https://segmentfault.com/image?src=http://www.helloerik.com/wp-content/uploads/image-5.png&objectId=1190000000743553&token=fabef95d23ff16af3f36c828300536e6">
+<meta property="og:image" content="https://segmentfault.com/image?src=http://www.helloerik.com/wp-content/uploads/image-6.png&objectId=1190000000743553&token=0adbcdd5d1606d76a3e245e4222acb8c">
+<meta property="og:updated_time" content="2017-05-01T12:58:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bootstrap栅格系统">
+<meta name="twitter:description" content="CONTAINERContainer有两个作用：  在随时可能的宽度变化(响应式)中提供宽度限制。当页面宽度变化，container 的宽度也随之变化。并且其中的 column 的宽度是基于百分比，所以他们的值不需要变化。 提供一个水平方向的 padding，使其内部的内容不会接触到浏览器的边界，大小为15px，就是图片中粉红色的部分，作用会在下面说。  注意，不需要也不应该在 container">
+<meta name="twitter:image" content="https://segmentfault.com/image?src=http://www.helloerik.com/wp-content/uploads/image-1.png&objectId=1190000000743553&token=f1609d392bd86b909dec84d37ced60dc">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/15/Bootstrap栅格系统/"/>
+
+
+
+
+
+  <title> Bootstrap栅格系统 | 红尘之中一单骑的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">红尘之中一单骑的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/15/Bootstrap栅格系统/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="孟 威">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="红尘之中一单骑的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Bootstrap栅格系统
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-15T15:42:26+08:00">
+                2017-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="CONTAINER"><a href="#CONTAINER" class="headerlink" title="CONTAINER"></a>CONTAINER</h3><p>Container有两个作用：</p>
+<ol>
+<li>在随时可能的宽度变化(响应式)中提供宽度限制。当页面宽度变化，container 的宽度也随之变化。并且其中的 column 的宽度是基于百分比，所以他们的值不需要变化。</li>
+<li>提供一个水平方向的 padding，使其内部的内容不会接触到浏览器的边界，大小为15px，就是图片中粉红色的部分，作用会在下面说。</li>
+</ol>
+<p>注意，不需要也不应该在 container 中嵌套另一个 container。</p>
+<p><img src="https://segmentfault.com/image?src=http://www.helloerik.com/wp-content/uploads/image-1.png&amp;objectId=1190000000743553&amp;token=f1609d392bd86b909dec84d37ced60dc" alt=""> </p>
+<h3 id="ROW"><a href="#ROW" class="headerlink" title="ROW"></a>ROW</h3><p>Row 是 column 直接存在的容器，按照文档描述 row 中最多可有12个 column，不过可以通过 nesting 的方式灵活扩展。同时作为都是左浮动的 column 的 wrapper，自带 clearfix 的性质。</p>
+<p>同时 row 还有一个很特殊的地方，就是左右各有 －15px 的 margin，就是图片中的蓝色部分。这样也就抵消了上面提到的 container 中15px的 padding，那么为什么要这么折腾呢？接着看往下读。</p>
+<p>注意：千万记住要把 row 放到 container 的内部，这样才能保证正常。</p>
+<p><img src="https://segmentfault.com/image?src=http://www.helloerik.com/wp-content/uploads/image-2.png&amp;objectId=1190000000743553&amp;token=7c67b580e7146a42924aebca0ffb9f7b" alt=""></p>
+<h3 id="COLUMN"><a href="#COLUMN" class="headerlink" title="COLUMN"></a>COLUMN</h3><p>注意啦，每个column 也会有15px的水平方向的 padding，也就是图片中黄色的部分，唉，先别急，会明白的。还记得上面提到的 row 的作用吗，colunmn 只能在 row 中生存，由于 row 的 margin 为－15px，那么位于两边的 column 就碰到了 container 的边界。但是 colunmn 本身又有 15px 的 padding 使得它其中的内容并不会碰到 container，同时 不同column的内容之间就有了30px的槽。结合图片看一下就一目了然了。</p>
+<p>注意：一定要把 column 放到 row 里使用。</p>
+<p><img src="https://segmentfault.com/image?src=http://www.helloerik.com/wp-content/uploads/image-3.png&amp;objectId=1190000000743553&amp;token=8fe037cc7d1cf17194a0a699a326c17c" alt=""></p>
+<h3 id="NESTING"><a href="#NESTING" class="headerlink" title="NESTING"></a>NESTING</h3><p>当把上面一系列的 container, row, column 都设置好，就可以通过 nesting 扩展它的栅格系统了，也就是在 column 中直接嵌套 row，而不需要再套一层 container：</p>
+<p><img src="https://segmentfault.com/image?src=http://www.helloerik.com/wp-content/uploads/image-5.png&amp;objectId=1190000000743553&amp;token=fabef95d23ff16af3f36c828300536e6" alt=""></p>
+<p>还记得 container 和 column 都有15px的 padding 吗，当 nesting 的时候 column 的作用也相当于 container 了，这样就可以实现任意的嵌套了。</p>
+<p><img src="https://segmentfault.com/image?src=http://www.helloerik.com/wp-content/uploads/image-6.png&amp;objectId=1190000000743553&amp;token=0adbcdd5d1606d76a3e245e4222acb8c" alt=""></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/Bootstrap/" rel="tag"># Bootstrap</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/10/JavaScript-this-Keyword/" rel="next" title="JavaScript's 'this' Keyword">
+                <i class="fa fa-chevron-left"></i> JavaScript's 'this' Keyword
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/30/JavaScript中的正则表达式/" rel="prev" title="JavaScript中的正则表达式">
+                JavaScript中的正则表达式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="孟 威" />
+          <p class="site-author-name" itemprop="name">孟 威</p>
+           
+              <p class="site-description motion-element" itemprop="description">深处种菱浅种稻，不深不浅种荷花</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CONTAINER"><span class="nav-number">1.</span> <span class="nav-text">CONTAINER</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROW"><span class="nav-number">2.</span> <span class="nav-text">ROW</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#COLUMN"><span class="nav-number">3.</span> <span class="nav-text">COLUMN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NESTING"><span class="nav-number">4.</span> <span class="nav-text">NESTING</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">孟 威</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,780 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端,JavaScript," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="What is the Execution Context &amp;amp; Stack in JavaScript?In this post I will take an in-depth look at one of the most fundamental parts of JavaScript, the Execution Context . By the end of this post, y">
+<meta name="keywords" content="前端,JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What is the Execution Context &amp; Stack in JavaScript?">
+<meta property="og:url" content="http://yoursite.com/2017/03/01/What-is-the-Execution-Context-&-Stack-in-JavaScript/index.html">
+<meta property="og:site_name" content="红尘之中一单骑的博客">
+<meta property="og:description" content="What is the Execution Context &amp;amp; Stack in JavaScript?In this post I will take an in-depth look at one of the most fundamental parts of JavaScript, the Execution Context . By the end of this post, y">
+<meta property="og:image" content="http://davidshariff.com/blog/wp-content/uploads/2012/06/img1.jpg">
+<meta property="og:image" content="http://davidshariff.com/blog/wp-content/uploads/2012/06/ecstack.jpg">
+<meta property="og:image" content="http://davidshariff.com/blog/wp-content/uploads/2012/06/es1.gif">
+<meta property="og:updated_time" content="2017-05-17T14:42:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="What is the Execution Context &amp; Stack in JavaScript?">
+<meta name="twitter:description" content="What is the Execution Context &amp;amp; Stack in JavaScript?In this post I will take an in-depth look at one of the most fundamental parts of JavaScript, the Execution Context . By the end of this post, y">
+<meta name="twitter:image" content="http://davidshariff.com/blog/wp-content/uploads/2012/06/img1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/01/What-is-the-Execution-Context-&-Stack-in-JavaScript/"/>
+
+
+
+
+
+  <title> What is the Execution Context & Stack in JavaScript? | 红尘之中一单骑的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">红尘之中一单骑的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/01/What-is-the-Execution-Context-&-Stack-in-JavaScript/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="孟 威">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="红尘之中一单骑的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                What is the Execution Context & Stack in JavaScript?
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-01T17:00:56+08:00">
+                2017-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="What-is-the-Execution-Context-amp-Stack-in-JavaScript"><a href="#What-is-the-Execution-Context-amp-Stack-in-JavaScript" class="headerlink" title="What is the Execution Context &amp; Stack in JavaScript?"></a>What is the Execution Context &amp; Stack in JavaScript?</h3><p>In this post I will take an in-depth look at one of the most fundamental parts of JavaScript, the <code>Execution Context</code> . By the end of this post, you should have a clearer understanding about what the interpreter is trying to do, why some functions / variables can be used before they are declared and how their value is really determined.</p>
+<h3 id="What-is-the-Execution-Context"><a href="#What-is-the-Execution-Context" class="headerlink" title="What is the Execution Context?"></a>What is the Execution Context?</h3><p>When code is run in JavaScript, the environment in which it is executed is very important, and is evaluated as 1 of the following:</p>
+<ul>
+<li><strong>Global code</strong> – The default envionment where your code is executed for the first time.</li>
+<li><strong>Function code</strong> – Whenever the flow of execution enters a function body.</li>
+<li><strong>Eval code</strong> – Text to be executed inside the internal eval function.</li>
+</ul>
+<p>You can read a lot of resources online that refer to <code>scope</code>, and for the purpose of this article to make things easier to understand, let’s think of the term <code>execution context</code> as the envionment / scope the current code is being evaluated in. Now, enough talking, let’s see an example that includes both  <code>global</code> and <code>function / local</code> context evaluated code.</p>
+<p><img src="http://davidshariff.com/blog/wp-content/uploads/2012/06/img1.jpg" alt="img1"></p>
+<p>Nothing special is going on here, we have 1  <code>global context</code> represented by the purple border and 3 different  <code>function contexts</code> represented by the green, blue and orange borders. There can only ever be 1  <code>global context</code>, which can be accessed from any other context in your program.</p>
+<p>You can have any number of  <code>function contexts</code>, and each function call creates a new context, which creates a private scope where anything declared inside of the function can not be directly accessed from outside the current function scope. In the example above, a function can access a variable declared outside of its current context, but an outside context can not access the variables / functions declared inside. Why does this happen? How exactly is this code evaluated?</p>
+<h3 id="Execution-Context-Stack"><a href="#Execution-Context-Stack" class="headerlink" title="Execution Context Stack"></a>Execution Context Stack</h3><p>The JavaScript interpreter in a browser is implemented as a single thread. What this actually means is that only 1 thing can ever happen at one time in the browser, with other actions or events being queued in what is called the  <code>Execution Stack</code>. The diagram below is an abstract view of a single threaded stack:</p>
+<p><img src="http://davidshariff.com/blog/wp-content/uploads/2012/06/ecstack.jpg" alt="ecstack"></p>
+<p>As we already know, when a browser first loads your script, it enters the  <code>global execution</code> context by default. If, in your global code you call a function, the sequence flow of your program enters the function being called, creating a new  <code>execution context</code> and pushing that context to the top of the  <code>execution stack</code>.</p>
+<p>If you call another function inside this current function, the same thing happens. The execution flow of code enters the inner function, which creates a new  <code>execution context</code> that is pushed to the top of the existing stack. The browser will always execute the current  <code>execution context</code> that sits on top of the stack, and once the function completes executing the current  <code>execution context</code>, it will be popped off the top of the stack, returning control to the context below in the current stack. The example below shows a recursive function and the program’s  <code>execution stack</code>:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">i</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (i === <span class="number">3</span>) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">        foo(++i);</div><div class="line">    &#125;</div><div class="line">&#125;(<span class="number">0</span>));</div></pre></td></tr></table></figure></p>
+<p>The code simply calls itself 3 times, incrementing the value of <code>i</code> by 1. Each time the function  <code>foo</code> is called, a new execution context is created. Once a context has finished executing, it pops off the stack and control returns to the context below it until the  <code>global context</code> is reached again.</p>
+<p><img src="http://davidshariff.com/blog/wp-content/uploads/2012/06/es1.gif" alt="es1"></p>
+<p>There are 5 key points to remember about the   <code>execution stack</code>:</p>
+<ul>
+<li>Single threaded.</li>
+<li>Synchronous execution.</li>
+<li>1 Global context.</li>
+<li>Infinite function contexts.</li>
+<li>Each function call creates a new execution context, even a call to itself.</li>
+</ul>
+<h3 id="Execution-Context-in-Detail"><a href="#Execution-Context-in-Detail" class="headerlink" title="Execution Context in Detail"></a>Execution Context in Detail</h3><p>So we now know that everytime a function is called, a new   <code>execution context</code> is created. However, inside the JavaScript interpreter, every call to an  <code>execution context</code> has 2 stages:</p>
+<ol>
+<li><strong>Creation Stage</strong> [when the function is called, but before it executes any code inside]:<ul>
+<li>Create the Scope Chain.</li>
+<li>Create variables, functions and arguments.</li>
+<li>Determine the value of “this”.</li>
+</ul>
+</li>
+<li><strong>Activation / Code Execution Stage</strong>:<ul>
+<li>Assign values, references to functions and interpret / execute code.</li>
+</ul>
+</li>
+</ol>
+<p>It is possible to represent each execution context conceptually as an object with 3 properties:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">executionContextObj = &#123;</div><div class="line">    <span class="string">'scopeChain'</span>: &#123; <span class="comment">/* variableObject + all parent execution context's variableObject */</span> &#125;,</div><div class="line">    <span class="string">'variableObject'</span>: &#123; <span class="comment">/* function arguments / parameters, inner variable and function declarations */</span> &#125;,</div><div class="line">    <span class="string">'this'</span>: &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="Activation-Variable-Object-AO-VO"><a href="#Activation-Variable-Object-AO-VO" class="headerlink" title="Activation / Variable Object [AO/VO]"></a>Activation / Variable Object [AO/VO]</h3><p>This  <code>executionContextObj</code> is created when the function is invoked, but <strong>before</strong> the actual function has been executed. This is known as stage 1, the  <code>Creation Stage</code>. Here, the interpreter creates the  <code>executionContextObj</code> by scanning the function for parameters or arguments passed in, local function declarations and local variable declarations. The result of this scan becomes the  <code>variableObject</code> in the  <code>executionContextObj</code>.</p>
+<p>Here is a pseudo-overview of how the interpreter evaluates the code:</p>
+<p>1.Find some code to invoke a function.<br>2.Before executing the  <code>function</code> code, create the <code>execution context</code>.<br>3.Enter the creation stage:</p>
+<ul>
+<li>Initialize the  <code>Scope Chain</code>.</li>
+<li>Create the  <code>variable object</code>:<ul>
+<li>Create the  <code>arguments object</code>, check the context for parameters, initialize the name and value and create a reference copy.</li>
+<li>Scan the context for function declarations:<ul>
+<li>For each function found, create a property in the   <code>variable object</code> that is the exact function name, which has a reference pointer to the function in memory.</li>
+<li>If the function name exists already, the reference pointer value will be overwritten.</li>
+</ul>
+</li>
+<li>Scan the context for variable declarations:<ul>
+<li>For each variable declaration found, create a property in the  <code>variable object</code> that is the variable name, and initialize the value as <strong>undefined</strong>.</li>
+<li>If the variable name already exists in the   <code>variable object</code>, do nothing and continue scanning.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Determine the value of “this” inside the context.</li>
+</ul>
+<p>4.Activation / Code Execution Stage:</p>
+<ul>
+<li>Run / interpret the function code in the context and assign variable values as the code is executed line by line.</li>
+</ul>
+<p>Let’s look at an example:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">i</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> a = <span class="string">'hello'</span>;</div><div class="line">    <span class="keyword">var</span> b = <span class="function"><span class="keyword">function</span> <span class="title">privateB</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    &#125;;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">c</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">foo(<span class="number">22</span>);</div></pre></td></tr></table></figure></p>
+<p>On calling <code>foo(22)</code>, the <code>creation stage</code> looks as follows:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">fooExecutionContext = &#123;</div><div class="line">    <span class="attr">scopeChain</span>: &#123; ... &#125;,</div><div class="line">    <span class="attr">variableObject</span>: &#123;</div><div class="line">        <span class="attr">arguments</span>: &#123;</div><div class="line">            <span class="number">0</span>: <span class="number">22</span>,</div><div class="line">            <span class="attr">length</span>: <span class="number">1</span></div><div class="line">        &#125;,</div><div class="line">        <span class="attr">i</span>: <span class="number">22</span>,</div><div class="line">        <span class="attr">c</span>: pointer to <span class="function"><span class="keyword">function</span> <span class="title">c</span>(<span class="params"></span>)</span></div><div class="line">        <span class="title">a</span>: <span class="title">undefined</span>,</div><div class="line">        <span class="title">b</span>: <span class="title">undefined</span></div><div class="line">    &#125;,</div><div class="line">    <span class="title">this</span>: &#123; ... &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>As you can see, the <code>creation stage</code> handles defining the names of the properties, not assigning a value to them, with the exception of formal arguments / parameters. Once the <code>creation stage</code> has finished, the flow of execution enters the function and the activation / code <code>execution stage</code> looks like this after the function has finished execution:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">fooExecutionContext = &#123;</div><div class="line">    <span class="attr">scopeChain</span>: &#123; ... &#125;,</div><div class="line">    <span class="attr">variableObject</span>: &#123;</div><div class="line">        <span class="attr">arguments</span>: &#123;</div><div class="line">            <span class="number">0</span>: <span class="number">22</span>,</div><div class="line">            <span class="attr">length</span>: <span class="number">1</span></div><div class="line">        &#125;,</div><div class="line">        <span class="attr">i</span>: <span class="number">22</span>,</div><div class="line">        <span class="attr">c</span>: pointer to <span class="function"><span class="keyword">function</span> <span class="title">c</span>(<span class="params"></span>)</span></div><div class="line">        <span class="title">a</span>: '<span class="title">hello</span>',</div><div class="line">        <span class="title">b</span>: <span class="title">pointer</span> <span class="title">to</span> <span class="title">function</span> <span class="title">privateB</span>(<span class="params"></span>)</div><div class="line">    &#125;,</div><div class="line">    <span class="title">this</span>: &#123; ... &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="A-Word-On-Hoisting"><a href="#A-Word-On-Hoisting" class="headerlink" title="A Word On Hoisting"></a>A Word On Hoisting</h3><p>You can find many resources online defining the term <code>hoisting</code> in JavaScript, explaining that variable and function declarations are hoisted to the top of their function scope. However, none explain in detail why this happens, and armed with your new knowledge about how the interpreter creates the  <code>activation object</code>, it is easy to see why. Take the following code example:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">typeof</span> foo); <span class="comment">// function pointer</span></div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">typeof</span> bar); <span class="comment">// undefined</span></div><div class="line"></div><div class="line">    <span class="keyword">var</span> foo = <span class="string">'hello'</span>,</div><div class="line">        bar = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> <span class="string">'world'</span>;</div><div class="line">        &#125;;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'hello'</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;());</div></pre></td></tr></table></figure></p>
+<p>The questions we can now answer are:</p>
+<ul>
+<li>Why can we access foo before we have declared it?<ul>
+<li>If we follow the<code>creation stage</code>, we know the variables have already been created before the  <code>activation / code execution stage</code>. So as the function flow started executing, <code>foo</code> had already been defined in the  <code>activation object</code>.</li>
+</ul>
+</li>
+<li>Foo is declared twice, why is foo shown to be <code>function</code> and not <code>undefined</code> or <code>string</code>?<ul>
+<li>Even though <code>foo</code> is declared twice, we know from the <code>creation stage</code> that functions are created on the<code>activation object</code> before variables, and if the property name already exists on the <code>activation object</code>, we simply bypass the decleration.</li>
+<li>Therefore, a reference to <code>function foo()</code> is first created on the <code>activation object</code>, and when the interpreter gets to <code>var foo</code>, we already see the property name<code>foo</code> exists so the code does nothing and proceeds.</li>
+</ul>
+</li>
+<li>Why is <code>bar</code> undefined?<ul>
+<li><code>bar</code> is actually a variable that has a function assignment, and we know the variables are created in the <code>creation stage</code> but they are initialized with the value of <code>undefined</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><p>Hopefully by now you have a good grasp about how the JavaScript interpreter is evaluating your code. Understanding the execution context and stack allows you to know the reasons behind why your code is evaluating to different values that you had not initially expected.</p>
+<p>Do you think knowing the inner workings of the interpreter is too much overhead or a necessity to your JavaScript knowledge ? Does knowing the execution context phase help you write better JavaScript ?</p>
+<blockquote>
+<p>原文链接：<a href="http://davidshariff.com/blog/what-is-the-execution-context-in-javascript/" target="_blank" rel="external">http://davidshariff.com/blog/what-is-the-execution-context-in-javascript/</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/03/Identifier-Resolution-and-Closures-in-the-JavaScript-Scope-Chain/" rel="prev" title="Identifier Resolution and Closures in the JavaScript Scope Chain">
+                Identifier Resolution and Closures in the JavaScript Scope Chain <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="孟 威" />
+          <p class="site-author-name" itemprop="name">孟 威</p>
+           
+              <p class="site-description motion-element" itemprop="description">深处种菱浅种稻，不深不浅种荷花</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#What-is-the-Execution-Context-amp-Stack-in-JavaScript"><span class="nav-number">1.</span> <span class="nav-text">What is the Execution Context & Stack in JavaScript?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-is-the-Execution-Context"><span class="nav-number">2.</span> <span class="nav-text">What is the Execution Context?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Execution-Context-Stack"><span class="nav-number">3.</span> <span class="nav-text">Execution Context Stack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Execution-Context-in-Detail"><span class="nav-number">4.</span> <span class="nav-text">Execution Context in Detail</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activation-Variable-Object-AO-VO"><span class="nav-number">5.</span> <span class="nav-text">Activation / Variable Object [AO/VO]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Word-On-Hoisting"><span class="nav-number">6.</span> <span class="nav-text">A Word On Hoisting</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary"><span class="nav-number">7.</span> <span class="nav-text">Summary</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">孟 威</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
